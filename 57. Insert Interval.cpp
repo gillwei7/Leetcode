@@ -1,29 +1,40 @@
-// 再度複習區間是否重疊, 需要比較新進來的interval 最小值, 是否比原interval最大值還要小
-// 這樣的話就可以確定是重疊
-
 class Solution {
 public:
-    vector<vector<int>> merge(vector<vector<int>>& intervals) {
-       vector<vector<int>> result;
-       if(intervals.size() == 0) return result; // 檢查intervals是否為空
-       sort(intervals.begin(), intervals.end()); // Interval 的問題總是需要先進行排序
-       result.push_back(intervals[0]); // 首先先把interval[0]放進去, 再從[1]開始一個一個比較
-       int j = 0; // result 的比較從[0]開始
-       for(int i = 1;i < intervals.size();i++)
-       {
-           // 如果新進來的interval有跟原本的interval重疊到
-           if(result[j][1] >= intervals[i][0] )
-           {
-               // 重新設定目前的interval區間, 因為intervals已經排序過了, 不會有後面的interval最小值反而比較小的情況 
-               result[j][1] = max(result[j][1], intervals[i][1]);
-           }
-           else // 如果新進來的interval沒有跟原本的interval重疊到
-           {
-               // 不用重新設定區間, 只要把現在的interval加入即可
-               j++;
-               result.push_back(intervals[i]);
-           }
-       }
-       return result;
+    vector<vector<int>> insert(vector<vector<int>>& intervals, vector<int>& newInterval) {
+        vector<vector<int>> result_intervals;
+        // 新區間為 null 的情況
+        if(intervals.empty()) {
+            result_intervals.push_back(newInterval);
+            return result_intervals;
+        }
+        for(int i = 0;i < intervals.size();i++) {
+            // 沒有重疊:新區間完全小於舊區間
+            if(newInterval[1] < intervals[i][0]) {
+                result_intervals.push_back(newInterval);
+                while(i < intervals.size()) {
+                    result_intervals.push_back(intervals[i]);
+                    i++;
+                }
+                return result_intervals;
+            }
+            else {
+                // 沒有重疊:新區間完全大於舊區間
+                if(newInterval[0] > intervals[i][1]) {
+                    result_intervals.push_back(intervals[i]);
+                }
+                // 有重疊:新區間和舊區間要比對最小值和最大值
+                else {
+                    int minimal = min(newInterval[0],intervals[i][0]);
+                    int maximal = max(newInterval[1],intervals[i][1]);
+                    newInterval[0] = minimal;
+                    newInterval[1] = maximal;
+                }
+                // 若是最後一輪比較,要記得把新區間也加入結果裡面
+                if(i == intervals.size() - 1) {
+                    result_intervals.push_back(newInterval);
+                }
+            }
+        }
+        return result_intervals;
     }
 };
