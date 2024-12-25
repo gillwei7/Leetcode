@@ -11,32 +11,40 @@
  */
 class Solution {
 public:
-    vector<vector<int>> levelOrder(TreeNode* root) {
-        if(root == nullptr){
-            return {};
+#if 0
+    // Recursive DFS method 
+    int maxDepth(TreeNode* root) {
+        if (root == nullptr) {
+            return 0; // Base case: the depth of an empty tree is 0
         }
-        // 用 BFS, 要先創一個 Node 的 queue 出來, 把同一層的節點都加進去
-        // 一開始先加 root
-        // 後面就是加上目前 Node 的 left 和 right
-        vector<vector<int>> ans;
-        queue<TreeNode*> q;
-        q.push(root);
-        while(!q.empty()) {
-            int s = q.size();
-            cout << "q.size" << s << endl;
-            // v 即為同一層的 node value
-            vector<int> v; 
-            // 對於同一層的 Node 取出後, 把 left 跟 right push 回去 queue
-            for(int i = 0;i < s;i++) {
-                TreeNode* node = q.front();
-                q.pop();
-                if(node->left != nullptr) q.push(node->left);
-                if(node->right != nullptr) q.push(node->right);
-                v.push_back(node->val);
-            }
-            // 把同一層的加到結果
-            ans.push_back(v);
-        }
-        return ans;
+        
+        // Recursively find the depth of the left and right subtrees
+        int leftDepth = maxDepth(root->left);
+        int rightDepth = maxDepth(root->right);
+        
+        // The maximum depth is 1 (current node) plus the maximum of the two subtrees
+        return 1 + std::max(leftDepth, rightDepth);
     }
+#else
+    // BFS method
+    int maxDepth(TreeNode* root) {
+        if(root == nullptr) return 0;
+        queue<TreeNode*> nodeQueue;
+        nodeQueue.push(root);
+        int depth = 0;
+        while(!nodeQueue.empty()) {
+            int levelSize = nodeQueue.size(); // Number of nodes at the current level
+            for(int i = 0;i < levelSize; i++) {
+                TreeNode* currentNode = nodeQueue.front();
+                nodeQueue.pop();
+                if(currentNode->left) nodeQueue.push(currentNode->left);
+                if(currentNode->right) nodeQueue.push(currentNode->right);
+            }
+            depth ++;
+        }
+        return depth;
+    }
+#endif
+
+
 };
