@@ -25,7 +25,7 @@ public:
         // The maximum depth is 1 (current node) plus the maximum of the two subtrees
         return 1 + std::max(leftDepth, rightDepth);
     }
-#else
+
     // BFS method
     int maxDepth(TreeNode* root) {
         if(root == nullptr) return 0;
@@ -44,6 +44,27 @@ public:
         }
         return depth;
     }
+#else
+// Iterative DFS, Use Stack, pre-Order traversal
+    int maxDepth(TreeNode* root) {
+        if(root == nullptr) return 0;
+
+        stack<pair<TreeNode*, int>> currentStack;
+        currentStack.push({root,1});
+        int resultDepth = 1;
+
+        while(!currentStack.empty()) {
+            // 這邊要用 auto 比較方便, 不然用 pair 的話就要用 .first .second 有點煩人
+            auto[currentNode,nodeDepth] = currentStack.top();
+            currentStack.pop();
+            resultDepth = max(resultDepth,nodeDepth);
+            if(currentNode->left) currentStack.push({currentNode->left,nodeDepth+1});
+            if(currentNode->right) currentStack.push({currentNode->right,nodeDepth+1});
+        }
+        return resultDepth;
+
+    }
+
 #endif
 
 
