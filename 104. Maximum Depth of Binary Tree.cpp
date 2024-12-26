@@ -46,23 +46,32 @@ public:
     }
 #else
 // Iterative DFS, Use Stack, pre-Order traversal
+// 因為這個方式是先處理目前的 Node, 再依序處理左子節點和右子節點
+// 我們要先創立一個 stack 裡面儲存現在的 Node 和 深度, 如果現在的深度比較深就更新結果
+// 有給出 Node 和 深度就 pop 掉, 然後再加入左子節點和右子節點(如果有的話)
     int maxDepth(TreeNode* root) {
         if(root == nullptr) return 0;
-
-        stack<pair<TreeNode*, int>> currentStack;
-        currentStack.push({root,1});
         int resultDepth = 1;
+        stack<pair<TreeNode*, int>> nodeStack;
+        TreeNode* currentNode; // 目前正在處理的 Node
+        int currentDepth; // 目前處理的 Node 的 length
+        nodeStack.push({root, 1}); // 先把 root 加進去
 
-        while(!currentStack.empty()) {
-            // 這邊要用 auto 比較方便, 不然用 pair 的話就要用 .first .second 有點煩人
-            auto[currentNode,nodeDepth] = currentStack.top();
-            currentStack.pop();
-            resultDepth = max(resultDepth,nodeDepth);
-            if(currentNode->left) currentStack.push({currentNode->left,nodeDepth+1});
-            if(currentNode->right) currentStack.push({currentNode->right,nodeDepth+1});
+        while(!nodeStack.empty()) {
+            // 這邊記得 stack 用法是先用 top() 取出來, 取完後再 pop() 掉
+            pair<TreeNode*, int> currentPair = nodeStack.top();
+            currentNode = currentPair.first;
+            currentDepth = currentPair.second;
+            nodeStack.pop();
+            // 先處理現在的節點, 深度有比較深的話就更新
+            if(currentDepth > resultDepth) {
+                resultDepth = currentDepth;
+            }
+            // 加入左右子節點, 記得深度都要加 1
+            if(currentNode->left)  nodeStack.push({currentNode->left,currentDepth + 1});
+            if(currentNode->right)  nodeStack.push({currentNode->right,currentDepth + 1});
         }
         return resultDepth;
-
     }
 
 #endif
