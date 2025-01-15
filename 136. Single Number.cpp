@@ -1,7 +1,9 @@
 class Solution {
 public:
     int singleNumber(vector<int>& nums) {
-        // 使用 hashmap, 計算每個整數出現的次數
+// 暴力法, 先把存到目前有的都存到 hash map
+#if 0 
+	// 使用 hashmap, 計算每個整數出現的次數
         // 最後再算出只有出現 1 次的那個整數
         // 這樣需要存整個 array 所以需要 O(n)
         // 另一個方式是可以只要有找到重複的就可以把原有存的整數刪掉
@@ -23,5 +25,16 @@ public:
             }
         }
         return 0;
+
+#else
+        int result = nums[0];
+        int index = 1;
+        while(index < nums.size()) {
+            result = result^nums[index];
+            index++;
+        }
+        return result;
+	
+#endif
     }
 };
