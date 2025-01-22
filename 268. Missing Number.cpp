@@ -1,6 +1,7 @@
 class Solution {
 public:
     int missingNumber(vector<int>& nums) {
+        #if 0
         int n = nums.size();
         int result;
         // 這裡把有遇到的數字加進去,
@@ -20,6 +21,15 @@ public:
             }
         }
         return -1;
+        #else
+        int length = nums.size();
+        int result = length* (length+1)/2;
+        for(int i = 0;i < nums.size();i++) {
+            result = result - nums[i];
+        }
+        return result;
+
+        #endif
 
     }
 };
