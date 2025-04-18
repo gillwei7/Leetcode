@@ -13,6 +13,8 @@ public:
     ListNode* mergeTwoLists(ListNode* list1, ListNode* list2) {
         // 要先創造一個有值的 dummy, 做為head 紀錄保存下來
         // 然後p 本身會跟著list1的p1或 list2的p2
+        // 如果沒有用 new ListNode(-1); 而是用 nullptr 的話, 因為不能直接操作 nullptr->next, 
+       //  就要每次加新的 Node 進來 list 都要檢查, 變很麻煩
         ListNode *dummy = new ListNode(-1);
         ListNode *p = dummy;
         ListNode *p1 = list1;
