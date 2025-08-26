@@ -2,7 +2,7 @@ class Solution {
 public:
     vector<vector<int>> insert(vector<vector<int>>& intervals, vector<int>& newInterval) {
         vector<vector<int>> result_intervals;
-        // 新區間為 null 的情況
+        // 舊區間為 null 的情況
         if(intervals.empty()) {
             result_intervals.push_back(newInterval);
             return result_intervals;
