@@ -26,8 +26,8 @@ public:
                 if(array_rotate == 0){
                     array_rotate = 1;
                 }else{
-                    if( result >= array_sum){
-                        result -= array_sum;
+                    if(result >= array_sum){
+                        result %= array_sum;
                     }
                 }
                 index = 0;
